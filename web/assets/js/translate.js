@@ -13,15 +13,12 @@ const { blocks, translations, cfg } = ctx;
 let currentIndex = 0; // block shown in the monitors
 
 // --- header -----------------------------------------------------------------
-document.getElementById("file-name").textContent = ctx.title || "";
-document.getElementById("metric-note").textContent =
-  cfg.metric === "wps"
-    ? `max ${cfg.wpsMax} words/s`
-    : `max ${cfg.cpsMax} chars/s`;
+document.getElementById("file-name").textContent =
+  ctx.mode === "project" ? `${ctx.title} · ${ctx.lang}` : ctx.title || "";
 
 setupProjectHeader();
 
-// In project mode: language dropdown, Configure link, and query-preserving tabs.
+// In project mode: language dropdown and query-preserving tabs.
 function setupProjectHeader() {
   const textviewLink = document.getElementById("textview-link");
   if (ctx.mode !== "project") {
@@ -30,8 +27,6 @@ function setupProjectHeader() {
   }
   const q = `?project=${encodeURIComponent(ctx.slug)}&lang=${encodeURIComponent(ctx.lang)}`;
   textviewLink.href = "/textview.html" + q;
-  document.getElementById("config-link").href =
-    `/config.html?project=${encodeURIComponent(ctx.slug)}`;
 
   const sel = document.getElementById("lang-select");
   const existing = new Set(ctx.existingLangs || []);

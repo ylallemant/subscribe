@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Translate · SubScribe</title>
+    <script>(function(){var t=localStorage.getItem("st:theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);})();</script>
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body class="app translate">
@@ -13,10 +14,18 @@
         <a id="translate-link" href="/translate.html" class="active">Translate</a>
         <a id="textview-link" href="/textview.html">Text view</a>
       </nav>
+      <span class="topbar-sep" aria-hidden="true"></span>
       <div class="project-controls" id="project-controls" hidden>
         <label>Language <select id="lang-select"></select></label>
-        <a id="config-link" class="btn ghost" href="#">Configure</a>
         <span id="save-status" class="save-status"></span>
+      </div>
+      <div class="export-controls">
+        <select id="export-format" title="Export format">
+          <option value="plain">.txt (plain)</option>
+          <option value="srt">.srt (SubRip)</option>
+          <option value="vtt">.vtt (WebVTT)</option>
+        </select>
+        <button id="download-btn" class="btn primary">Download</button>
       </div>
       <div class="monitor-controls">
         <label>Ratio <select id="ratio-select"></select></label>
@@ -31,13 +40,6 @@
       </div>
       <div class="topbar-actions">
         <span id="file-name" class="file-name"></span>
-        <label class="metric-note" id="metric-note"></label>
-        <select id="export-format" title="Export format">
-          <option value="plain">.txt (plain)</option>
-          <option value="srt">.srt (SubRip)</option>
-          <option value="vtt">.vtt (WebVTT)</option>
-        </select>
-        <button id="download-btn" class="btn primary">Download</button>
       </div>
     </header>
 

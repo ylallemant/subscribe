@@ -1,6 +1,7 @@
 import { severity, severityColor } from "./common.js";
 import { createMinimap } from "./minimap.js";
 import { loadContext } from "./session.js";
+import { initThemeToggle } from "./theme.js";
 
 const ctx = await loadContext();
 const { blocks, translations, cfg } = ctx;
@@ -83,11 +84,14 @@ const minimap = createMinimap({
 });
 requestAnimationFrame(() => minimap.refresh());
 
+// Theme (dark/light) toggle — defaults to the system setting.
+initThemeToggle(document.getElementById("toggle-theme"));
+
 // Colour toggle — hides the reading-speed colour on the text fragments (the
-// overview keeps its colours). Preference is remembered.
+// overview keeps its colours). Defaults to off; preference is remembered.
 const COLORS_KEY = "st:tv-colors";
 const toggle = document.getElementById("toggle-color");
-let colorsOn = localStorage.getItem(COLORS_KEY) !== "off";
+let colorsOn = localStorage.getItem(COLORS_KEY) === "on";
 function applyColors() {
   paragraphsEl.classList.toggle("colors-off", !colorsOn);
   toggle.textContent = colorsOn ? "Colours: on" : "Colours: off";
