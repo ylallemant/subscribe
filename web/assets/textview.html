@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Text view · SubScribe</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="app textview">
+    <header class="topbar">
+      <div class="brand"><a href="/">🎬 SubScribe</a></div>
+      <nav class="tabs">
+        <a id="translate-link" href="/translate.html">Translate</a>
+        <a id="textview-link" href="/textview.html" class="active">Text view</a>
+      </nav>
+      <div class="topbar-actions">
+        <span id="file-name" class="file-name"></span>
+        <button id="toggle-color" class="btn ghost" type="button" title="Toggle reading-speed colours in the text (the overview keeps its colours)">Colours: on</button>
+      </div>
+    </header>
+
+    <p class="hint">
+      Proof-read both languages as flowing prose. Each fragment is coloured by
+      its reading-speed load — <strong>click any fragment to jump to its
+      translation box</strong>.
+    </p>
+
+    <div class="textview-wrap">
+      <div class="grid-head textview-head">
+        <div class="head-cols">
+          <div>Reference</div>
+          <div>Translation</div>
+        </div>
+        <div class="col-map">Overview</div>
+      </div>
+      <div class="textview-body">
+        <div id="tv-scroll" class="tv-scroll">
+          <div id="paragraphs" class="paragraphs"></div>
+        </div>
+        <div id="minimap" class="minimap" title="Overview — click or drag to jump">
+          <canvas id="minimap-canvas"></canvas>
+          <div id="minimap-viewport" class="mm-viewport"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/js/textview.js"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+# Build output
+/subscribe
+/bin/
+/dist/
+*.exe
+
+# Go
+vendor/
+*.test
+*.out
+coverage.*
+
+# Project data / local content (kept out of the repo)
+/backup/
+/subscribe-data/
+*.local/
+
+# OS
+**/.DS_Store
+**/Thumbs.db
+
+# Editors / tooling
+.idea/
+.vscode/
+.history/
+.claude/

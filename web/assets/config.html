@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Configure · SubScribe</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="landing">
+    <header class="topbar">
+      <div class="brand"><a href="/">🎬 SubScribe</a></div>
+      <div class="topbar-actions">
+        <span id="project-title" class="file-name"></span>
+        <a id="open-btn" class="btn primary" href="#">Open workbench →</a>
+      </div>
+    </header>
+
+    <main class="landing-main single">
+      <section class="panel">
+        <h2>Subtitle files</h2>
+        <p class="muted">
+          Add the original subtitle file (and any existing translations). Each
+          file is stored for its language and converted to the project format.
+          Then choose which language is the original.
+        </p>
+
+        <div class="field-row add-file-row">
+          <div class="field">
+            <label for="source-input">File</label>
+            <input id="source-input" type="file" accept=".plain,.txt,.srt,.vtt,text/plain" />
+          </div>
+          <div class="field">
+            <label for="upload-lang">Language of this file</label>
+            <select id="upload-lang"></select>
+          </div>
+          <div class="field add-file-action">
+            <label>&nbsp;</label>
+            <button id="add-file-btn" type="button" class="btn">Add file</button>
+          </div>
+        </div>
+
+        <ul id="source-list" class="source-list"></ul>
+
+        <div class="field">
+          <label for="reference-lang">Original (reference) language</label>
+          <select id="reference-lang"></select>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Settings</h2>
+        <div class="field-row">
+          <div class="field">
+            <label for="format">Translation file format</label>
+            <select id="format">
+              <option value="txt">Plain text (.txt)</option>
+              <option value="srt">SubRip (.srt)</option>
+              <option value="vtt">WebVTT (.vtt)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="fps">Frame rate (fps)</label>
+            <input id="fps" type="number" step="0.001" min="1" />
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="metric">Reading-speed metric</label>
+            <select id="metric">
+              <option value="cps">Characters / second</option>
+              <option value="wps">Words / second</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="cpsMax">Max chars/second</label>
+            <input id="cpsMax" type="number" step="0.1" min="1" />
+          </div>
+          <div class="field">
+            <label for="wpsMax">Max words/second</label>
+            <input id="wpsMax" type="number" step="0.1" min="0.5" />
+          </div>
+        </div>
+      </section>
+
+      <div class="save-bar">
+        <button id="save-btn" class="btn primary">Save settings</button>
+        <span id="status" class="status" role="status"></span>
+      </div>
+    </main>
+
+    <script type="module" src="/js/config.js"></script>
+  </body>
+</html>

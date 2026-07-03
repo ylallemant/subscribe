@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SubScribe</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="landing">
+    <header class="topbar">
+      <div class="brand">🎬 SubScribe</div>
+    </header>
+
+    <main class="landing-main single">
+      <section class="hero">
+        <h1>Translate subtitles, keep the timing.</h1>
+        <p class="lead">
+          Collaborate on subtitle translations, side by side with the original.
+          SubScribe keeps every line aligned to its time box, previews how the
+          text looks on screen, and warns you when a line is too long to read in
+          the time it's shown.
+        </p>
+      </section>
+
+      <!-- Projects -->
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Projects</h2>
+          <form id="new-project-form" class="inline-form">
+            <input id="project-name" type="text" placeholder="New project name (e.g. À l'Assaut du Ciel)" />
+            <button type="submit" class="btn primary">Create</button>
+          </form>
+        </div>
+        <p id="project-error" class="status error"></p>
+        <ul id="project-list" class="project-list">
+          <li class="muted">Loading projects…</li>
+        </ul>
+      </section>
+
+      <!-- Quick mode -->
+      <section class="panel">
+        <details id="quick-details">
+          <summary><strong>Quick mode</strong> — translate or review a one-off file without saving a project</summary>
+          <form id="upload-form" class="quick-form">
+            <label id="dropzone-ref" class="dropzone compact" data-slot="ref">
+              <div class="dz-icon">⬆️</div>
+              <div class="dz-title">Reference subtitle <span class="req">(required)</span></div>
+              <div class="dz-sub" data-role="hint">
+                Drop or click — the original-language <code>.plain</code> / <code>.txt</code>
+              </div>
+              <input type="file" accept=".plain,.txt,text/plain" hidden />
+            </label>
+
+            <label id="dropzone-tr" class="dropzone compact" data-slot="tr">
+              <div class="dz-icon">🌍</div>
+              <div class="dz-title">Existing translation <span class="opt">(optional)</span></div>
+              <div class="dz-sub" data-role="hint">
+                Add a translated file to <strong>review</strong> it side by side
+              </div>
+              <input type="file" accept=".plain,.txt,text/plain" hidden />
+            </label>
+
+            <button id="open-btn" type="submit" class="btn primary open-btn" disabled>
+              Open workbench →
+            </button>
+            <p id="status" class="status" role="status"></p>
+          </form>
+        </details>
+      </section>
+    </main>
+
+    <script type="module" src="/js/landing.js"></script>
+  </body>
+</html>
