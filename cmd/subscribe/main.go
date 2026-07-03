@@ -47,6 +47,7 @@ func run(args []string) error {
 	wpsMax := fs.Float64("wps-max", envFloat("SUBSCRIBE_WPS_MAX", 3), "max comfortable words per second")
 	noBrowser := fs.Bool("no-browser", envBool("SUBSCRIBE_NO_BROWSER", false), "do not open a browser (CLI mode)")
 	dataDir := fs.String("data-dir", envOr("SUBSCRIBE_DATA_DIR", defaultDataDir()), "directory where projects are stored")
+	disableDelete := fs.Bool("disable-delete", envBool("SUBSCRIBE_DISABLE_DELETE", false), "disable project deletion")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -61,7 +62,7 @@ func run(args []string) error {
 		return fmt.Errorf("open data dir %s: %w", *dataDir, err)
 	}
 
-	handler := server.New(server.Options{FPS: *fps, Reading: cfg, Store: store})
+	handler := server.New(server.Options{FPS: *fps, Reading: cfg, Store: store, DisableDelete: *disableDelete})
 
 	ln, err := net.Listen("tcp", *addr)
 	if err != nil {

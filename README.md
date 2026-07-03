@@ -298,6 +298,7 @@ Configuration can be provided via flags and/or environment variables.
 | --- | --- | --- | --- |
 | `--addr` | `SUBSCRIBE_ADDR` | `:8080` | Address the web server listens on. |
 | `--data-dir` | `SUBSCRIBE_DATA_DIR` | `~/.subscribe` | Directory where projects are stored. |
+| `--disable-delete` | `SUBSCRIBE_DISABLE_DELETE` | `false` | Forbid project deletion (hides the Delete button and returns 403). |
 | `--fps` | `SUBSCRIBE_FPS` | `25` | Frame rate used to turn `:FF` frames into a duration (quick mode default; projects store their own). |
 | `--reading-metric` | `SUBSCRIBE_READING_METRIC` | `cps` | Reading-speed metric: `cps` or `wps`. |
 | `--cps-max` | `SUBSCRIBE_CPS_MAX` | `17` | Max comfortable characters per second before warning. |

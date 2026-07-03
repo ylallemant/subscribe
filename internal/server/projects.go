@@ -19,6 +19,14 @@ func (s *srv) storeReady(w http.ResponseWriter) bool {
 	return true
 }
 
+// handleCapabilities reports server toggles the UI needs (e.g. whether the
+// Delete button should be shown).
+func (s *srv) handleCapabilities(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, http.StatusOK, map[string]bool{
+		"allowDelete": !s.opts.DisableDelete,
+	})
+}
+
 func (s *srv) handleLanguages(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, langs.All)
 }
@@ -70,6 +78,10 @@ func (s *srv) handleGetProject(w http.ResponseWriter, r *http.Request) {
 
 func (s *srv) handleDeleteProject(w http.ResponseWriter, r *http.Request) {
 	if !s.storeReady(w) {
+		return
+	}
+	if s.opts.DisableDelete {
+		http.Error(w, "project deletion is disabled on this server", http.StatusForbidden)
 		return
 	}
 	if s.writeStoreErr(w, s.opts.Store.Delete(r.PathValue("slug"))) {

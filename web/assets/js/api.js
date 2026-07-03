@@ -14,6 +14,7 @@ async function req(method, url, body) {
 }
 
 export const api = {
+  capabilities: () => req("GET", "/api/capabilities"),
   languages: () => req("GET", "/api/languages"),
 
   listProjects: () => req("GET", "/api/projects"),

@@ -20,9 +20,10 @@ import (
 
 // Options configures the server's reading-speed behaviour and project store.
 type Options struct {
-	FPS     float64
-	Reading reading.Config
-	Store   *project.Store // on-disk project store
+	FPS           float64
+	Reading       reading.Config
+	Store         *project.Store // on-disk project store
+	DisableDelete bool           // when true, project deletion is forbidden
 }
 
 // New returns an http.Handler with the API and static assets mounted.
@@ -34,6 +35,7 @@ func New(opts Options) http.Handler {
 	mux.HandleFunc("/api/parse", s.handleParse)
 	mux.HandleFunc("/api/export", s.handleExport)
 	// Projects.
+	mux.HandleFunc("GET /api/capabilities", s.handleCapabilities)
 	mux.HandleFunc("GET /api/languages", s.handleLanguages)
 	mux.HandleFunc("GET /api/projects", s.handleListProjects)
 	mux.HandleFunc("POST /api/projects", s.handleCreateProject)

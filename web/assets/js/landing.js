@@ -9,13 +9,19 @@ const projectError = document.getElementById("project-error");
 const newProjectForm = document.getElementById("new-project-form");
 const projectNameInput = document.getElementById("project-name");
 
+let allowDelete = true; // server capability; the button is hidden when false
+
 function projectErr(msg) {
   projectError.textContent = msg || "";
 }
 
 async function refreshProjects() {
   try {
-    const projects = await api.listProjects();
+    const [caps, projects] = await Promise.all([
+      api.capabilities().catch(() => ({ allowDelete: true })),
+      api.listProjects(),
+    ]);
+    allowDelete = caps.allowDelete !== false;
     renderProjects(projects);
   } catch (err) {
     projectList.innerHTML = "";
@@ -47,7 +53,7 @@ function renderProjects(projects) {
       </div>
       <div class="project-actions">
         <a class="btn ghost" href="/config.html?project=${encodeURIComponent(p.slug)}">Configure</a>
-        <button class="btn ghost danger" data-del="${p.slug}">Delete</button>
+        ${allowDelete ? `<button class="btn ghost danger" data-del="${p.slug}">Delete</button>` : ""}
       </div>`;
     // The whole tile opens the translation; the action buttons opt out.
     li.addEventListener("click", (e) => {
