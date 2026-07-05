@@ -48,17 +48,32 @@ async function loadProject(slug, params) {
   ]);
 
   const existing = proj.languages || [];
-  const lang =
-    params.get("lang") || lastLang(slug) || proj.settings.referenceLang || existing[0] || "eng";
-  const { translations } = await api.loadTranslation(slug, lang);
-  setLastLang(slug, lang);
+  const ref = proj.settings.referenceLang || "";
+  const paramLang = params.get("lang");
+  const remembered = lastLang(slug);
+  const otherExisting = existing.filter((l) => l !== ref);
+
+  // Never default to the original/reference language: prefer an explicit URL
+  // choice, then a remembered non-reference language, then the first other
+  // existing translation. Empty => no language yet (the UI shows a picker).
+  let lang = "";
+  if (paramLang) lang = paramLang;
+  else if (remembered && remembered !== ref && existing.includes(remembered)) lang = remembered;
+  else if (otherExisting.length) lang = otherExisting[0];
 
   const blocks = original.blocks;
+  let translations;
+  if (lang) {
+    ({ translations } = await api.loadTranslation(slug, lang));
+    setLastLang(slug, lang);
+  } else {
+    translations = new Array(blocks.length).fill("");
+  }
   while (translations.length < blocks.length) translations.push("");
 
   let dirty = false;
   const commit = async () => {
-    if (!dirty) return;
+    if (!lang || !dirty) return;
     dirty = false;
     await api.saveTranslation(slug, lang, translations);
   };
@@ -67,8 +82,10 @@ async function loadProject(slug, params) {
     mode: "project",
     slug,
     lang,
+    needsLang: !lang, // no translation language chosen yet
     languages,
     existingLangs: existing,
+    referenceLang: ref,
     blocks,
     translations,
     cfg: original.config,
@@ -79,7 +96,7 @@ async function loadProject(slug, params) {
     },
     onCommit: commit,
     switchLang: async (newLang) => {
-      await api.saveTranslation(slug, lang, translations); // flush current work
+      if (lang) await api.saveTranslation(slug, lang, translations); // flush current work
       setLastLang(slug, newLang);
       const url = new URL(location.href);
       url.searchParams.set("lang", newLang);

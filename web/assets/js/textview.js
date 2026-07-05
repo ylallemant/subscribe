@@ -14,7 +14,7 @@ const q =
 document.getElementById("translate-link").href = "/translate.html" + q;
 document.getElementById("textview-link").href = "/textview.html" + q;
 document.getElementById("file-name").textContent =
-  ctx.mode === "project" ? `${ctx.title} · ${ctx.lang}` : ctx.title || "";
+  ctx.mode === "project" && ctx.lang ? `${ctx.title} · ${ctx.lang}` : ctx.title || "";
 
 // Group consecutive blocks into paragraphs, breaking after a block whose
 // reference text ends with sentence-ending punctuation.

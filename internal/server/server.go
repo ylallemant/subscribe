@@ -46,9 +46,19 @@ func New(opts Options) http.Handler {
 	mux.HandleFunc("GET /api/projects/{slug}/original", s.handleProjectOriginal)
 	mux.HandleFunc("GET /api/projects/{slug}/translations/{lang}", s.handleLoadTranslation)
 	mux.HandleFunc("PUT /api/projects/{slug}/translations/{lang}", s.handleSaveTranslation)
-	// Static assets.
-	mux.Handle("/", http.FileServer(http.FS(web.FS())))
+	// Static assets. Served with no-cache so a rebuild's updated embedded
+	// assets are always picked up (ES modules cache aggressively otherwise).
+	mux.Handle("/", noCache(http.FileServer(http.FS(web.FS()))))
 	return mux
+}
+
+// noCache tells the browser to always revalidate static assets, avoiding stale
+// cached JS modules after the binary is rebuilt.
+func noCache(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
+		h.ServeHTTP(w, r)
+	})
 }
 
 type srv struct{ opts Options }

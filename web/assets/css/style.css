@@ -464,3 +464,35 @@ body.textview .minimap.seeking { cursor: grabbing; }
 .add-file-action { flex: 0 0 auto; }
 .source-list li { display: flex; align-items: center; gap: 8px; }
 .source-list code { margin-left: auto; color: var(--muted); }
+
+/* Language picker overlay (Translate page, when no language is chosen) */
+.lang-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 15; /* below the sticky top bar (z-index 20) so it stays clickable */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+}
+/* Author `display: flex` above would otherwise override the [hidden] attribute
+   (author styles beat the UA `[hidden] { display: none }`), leaving the overlay
+   permanently visible. This restores hide-when-hidden. */
+.lang-overlay[hidden] { display: none; }
+.lang-overlay-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 26px 30px;
+  width: min(90vw, 460px);
+  text-align: center;
+  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.45);
+}
+.lang-overlay-card h2 { margin: 0 0 8px; font-size: 1.2rem; }
+.lang-overlay-card p { margin: 0 0 4px; }
+.lang-overlay-card select {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 12px;
+  font-size: 1rem;
+}

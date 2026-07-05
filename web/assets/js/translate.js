@@ -14,9 +14,31 @@ let currentIndex = 0; // block shown in the monitors
 
 // --- header -----------------------------------------------------------------
 document.getElementById("file-name").textContent =
-  ctx.mode === "project" ? `${ctx.title} · ${ctx.lang}` : ctx.title || "";
+  ctx.mode === "project"
+    ? ctx.lang
+      ? `${ctx.title} · ${ctx.lang}`
+      : ctx.title
+    : ctx.title || "";
 
 setupProjectHeader();
+
+// Build <optgroup>s of languages: existing translations vs. new ones. The
+// reference language is excluded (it's the original, not a translation target).
+function langOptions(current) {
+  const existing = new Set(ctx.existingLangs || []);
+  const selectable = ctx.languages.filter((l) => l.code !== ctx.referenceLang);
+  const inProgress = selectable.filter((l) => existing.has(l.code));
+  const others = selectable.filter((l) => !existing.has(l.code));
+  const optgroup = (label, items) =>
+    items.length
+      ? `<optgroup label="${label}">` +
+        items
+          .map((l) => `<option value="${l.code}"${l.code === current ? " selected" : ""}>${l.name} (${l.code})</option>`)
+          .join("") +
+        `</optgroup>`
+      : "";
+  return optgroup("In progress", inProgress) + optgroup("Start new", others);
+}
 
 // In project mode: language dropdown and query-preserving tabs.
 function setupProjectHeader() {
@@ -25,23 +47,33 @@ function setupProjectHeader() {
     textviewLink.href = "/textview.html";
     return;
   }
-  const q = `?project=${encodeURIComponent(ctx.slug)}&lang=${encodeURIComponent(ctx.lang)}`;
+  const q = `?project=${encodeURIComponent(ctx.slug)}&lang=${encodeURIComponent(ctx.lang || "")}`;
   textviewLink.href = "/textview.html" + q;
 
   const sel = document.getElementById("lang-select");
-  const existing = new Set(ctx.existingLangs || []);
-  const inProgress = ctx.languages.filter((l) => existing.has(l.code));
-  const others = ctx.languages.filter((l) => !existing.has(l.code));
-  const optgroup = (label, items) => {
-    if (!items.length) return "";
-    return `<optgroup label="${label}">` +
-      items.map((l) => `<option value="${l.code}"${l.code === ctx.lang ? " selected" : ""}>${l.name} (${l.code})</option>`).join("") +
-      `</optgroup>`;
-  };
-  sel.innerHTML = optgroup("In progress", inProgress) + optgroup("Start new", others);
-  sel.addEventListener("change", () => ctx.switchLang(sel.value));
+  const placeholder = ctx.lang ? "" : `<option value="" disabled selected>— language —</option>`;
+  sel.innerHTML = placeholder + langOptions(ctx.lang);
+  sel.addEventListener("change", () => sel.value && ctx.switchLang(sel.value));
 
   document.getElementById("project-controls").hidden = false;
+
+  if (ctx.needsLang) showLangOverlay();
+}
+
+// When no language is chosen, block editing behind a picker overlay. The
+// overlay mirrors the header language dropdown's entries exactly (it clones the
+// header's <optgroup>s), so the two can never diverge.
+function showLangOverlay() {
+  const overlay = document.getElementById("lang-overlay");
+  const sel = document.getElementById("overlay-lang-select");
+  const header = document.getElementById("lang-select");
+  const groups = Array.from(header.querySelectorAll("optgroup"))
+    .map((g) => g.outerHTML)
+    .join("");
+  sel.innerHTML = `<option value="" disabled selected>— choose a language —</option>` + groups;
+  sel.value = ""; // show the placeholder, ignore any cloned "selected"
+  sel.addEventListener("change", () => sel.value && ctx.switchLang(sel.value));
+  overlay.hidden = false;
 }
 
 const saveStatus = document.getElementById("save-status");
@@ -190,7 +222,9 @@ document.getElementById("download-btn").addEventListener("click", async () => {
   const ext = format === "plain" ? "txt" : format;
   const base =
     ctx.mode === "project"
-      ? `${ctx.slug}.${ctx.lang}`
+      ? ctx.lang
+        ? `${ctx.slug}.${ctx.lang}`
+        : ctx.slug
       : (ctx.title || "translation").replace(/\.[^.]+$/, "");
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);

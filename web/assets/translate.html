@@ -78,6 +78,18 @@
       </div>
     </div>
 
+    <!-- Language picker overlay (shown when no translation language is chosen) -->
+    <div id="lang-overlay" class="lang-overlay" hidden>
+      <div class="lang-overlay-card">
+        <h2>Pick a language to translate into</h2>
+        <p class="muted">
+          Continue an existing translation, or start a new one. The original
+          stays as the reference alongside.
+        </p>
+        <select id="overlay-lang-select"></select>
+      </div>
+    </div>
+
     <script type="module" src="/js/translate.js"></script>
   </body>
 </html>
