@@ -27,8 +27,17 @@
         </select>
         <button id="download-btn" class="btn primary">Download</button>
       </div>
+      <div class="topbar-actions">
+        <span id="file-name" class="file-name"></span>
+      </div>
+    </header>
+
+    <!-- Preview monitors -->
+    <section class="monitors" id="monitors">
       <div class="monitor-controls">
-        <label>Ratio <select id="ratio-select"></select></label>
+        <label>Ratio
+          <select id="ratio-select"></select>
+        </label>
         <label>Text
           <select id="textsize-select" title="Caption text size">
             <option value="0.8">Small</option>
@@ -38,13 +47,6 @@
           </select>
         </label>
       </div>
-      <div class="topbar-actions">
-        <span id="file-name" class="file-name"></span>
-      </div>
-    </header>
-
-    <!-- Preview monitors -->
-    <section class="monitors" id="monitors">
       <div class="monitors-row">
         <div class="monitor">
           <div class="monitor-label">Original</div>
@@ -55,6 +57,7 @@
           <div class="screen"><div class="caption"></div></div>
         </div>
       </div>
+      <button id="preview-play" class="preview-play" type="button" title="Preview the translation as a timed stream">▶</button>
     </section>
 
     <!-- 4-column workbench -->

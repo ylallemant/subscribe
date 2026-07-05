@@ -123,6 +123,35 @@ function applyTextSize(scale) {
 textSizeSelect.addEventListener("change", () => applyTextSize(textSizeSelect.value));
 applyTextSize(textSizeSelect.value);
 
+// --- preview mode -----------------------------------------------------------
+// Open a timed "video stream" of the translation in a new window.
+function tcToSeconds(tc) {
+  const [h, m, s, f] = tc.split(":").map(Number);
+  return h * 3600 + m * 60 + s + f / (cfg.fps || 25);
+}
+
+document.getElementById("preview-play").addEventListener("click", () => {
+  // Build cues, rebased so the first subtitle starts near t=0 (skip the lead-in).
+  const raw = blocks.map((b, i) => ({
+    start: tcToSeconds(b.start),
+    end: tcToSeconds(b.end),
+    text: translations[i] || "",
+  }));
+  const offset = raw.length ? raw[0].start : 0;
+  const cues = raw.map((c) => ({ start: c.start - offset, end: c.end - offset, text: c.text }));
+  const duration = cues.length ? Math.max(...cues.map((c) => c.end)) : 0;
+
+  const data = {
+    title: ctx.mode === "project" && ctx.lang ? `${ctx.title} · ${ctx.lang}` : ctx.title,
+    cues,
+    duration,
+    ratio: parseFloat(ratioSelect.value) || 16 / 9,
+    captionScale: parseFloat(textSizeSelect.value) || 1,
+  };
+  localStorage.setItem("st:preview", JSON.stringify(data));
+  window.open("/preview.html", "subscribe-preview", "width=1000,height=640");
+});
+
 function renderMonitors() {
   // Left monitor = original (reference); right monitor = translation.
   const ref = blocks[currentIndex]?.text || "";

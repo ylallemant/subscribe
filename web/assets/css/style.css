@@ -160,12 +160,34 @@ select {
 /* ---------- monitors ---------- */
 .monitors {
   display: flex;
+  align-items: center;
   justify-content: center;
+  gap: 24px;
   padding: 12px 14px;
   background: var(--panel);
   border-bottom: 1px solid var(--border);
 }
 .monitors-row { display: flex; gap: 18px; justify-content: center; }
+/* Ratio/Text controls stack vertically to the left of the monitors. */
+.monitors .monitor-controls { flex-direction: column; align-items: flex-start; gap: 8px; }
+
+/* Preview "Play" button to the right of the monitors. */
+.preview-play {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--panel-2);
+  color: var(--text);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.preview-play:hover { border-color: var(--accent); color: var(--accent); }
 
 /* Header monitor controls (aspect ratio + caption text size). */
 .export-controls { display: flex; align-items: center; gap: 10px; }
@@ -496,3 +518,49 @@ body.textview .minimap.seeking { cursor: grabbing; }
   padding: 10px 12px;
   font-size: 1rem;
 }
+
+/* ---------- preview player (separate window) ---------- */
+body.preview {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #000;
+  overflow: hidden;
+}
+.preview-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+}
+/* Size (width/height) is computed in preview.js to fill the stage while keeping
+   the target aspect ratio. */
+.preview-screen {
+  background: #000;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+.preview-caption {
+  color: #fff;
+  text-align: center;
+  font-size: calc(clamp(0.9rem, 3.2vw, 2rem) * var(--caption-scale, 1));
+  line-height: 1.25;
+  padding: 0 6% 8%;
+  text-shadow: 0 1px 2px #000, 0 0 6px #000;
+  white-space: pre-wrap;
+}
+.preview-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
+  background: var(--panel);
+  border-top: 1px solid var(--border);
+}
+.preview-time { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); min-width: 96px; }
+.preview-seek { flex: 1; accent-color: var(--accent); cursor: pointer; }

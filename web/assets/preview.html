@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Preview · SubScribe</title>
+    <script>(function(){var t=localStorage.getItem("st:theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t);})();</script>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="preview">
+    <div class="preview-stage">
+      <div id="preview-screen" class="preview-screen">
+        <div id="preview-caption" class="preview-caption"></div>
+      </div>
+    </div>
+
+    <div class="preview-controls">
+      <button id="preview-toggle" class="btn icon-btn" type="button" title="Play / pause (space)">▶</button>
+      <span id="preview-time" class="preview-time">0:00 / 0:00</span>
+      <input id="preview-seek" class="preview-seek" type="range" min="0" max="100" step="0.01" value="0" />
+    </div>
+
+    <script type="module" src="/js/preview.js"></script>
+  </body>
+</html>
